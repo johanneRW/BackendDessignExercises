@@ -6,39 +6,42 @@
     <link rel="stylesheet" th:href="@{style.css}" type="text/css">
 </head>
 <body>
+<div th:fragment="header"></div>
+<div class="container">
+    <header th:include="header :: header"></header>
 
-<h1> Create new employee</h1>
-<form th:action="@{/createEmployee}" method="post">
+    <h2 th:if="${success} == 'true'">Succes!</h2>
 
-    <p>
-        <input type="text" id="empName" placeholder="Employee name"
-               name="empName" required/>
-    </p>
-    <p>
-        <input type="text" id="job" placeholder="job"
-               name="job" required/>
-    </p>
-    <p>
-        <input type="number" id="manger" placeholder="manger id" name="manger" required/>
-    </p>
-    <p>
-        <input type="text" id="hireDate" placeholder="yyyy-mm-dd" name="hireDate" required/>
-    </p>
-    <p>
-        <input type="number" id="salary" placeholder="salary" name="salary" required/>
-    </p>
-    <p>
-        <input type="number" id="commission" placeholder="commission" name="commission"/>
-    </p>
-    <p>
-        <input type="number" id="depID" placeholder="Department id" name="depID" required/>
-    </p>
-    <p>
-        <input type="submit" value=" create "/>
-    </p>
+    <h1> Create new employee</h1>
+    <form th:action="@{/createEmployee}" method="post">
 
-</form>
+        <p>
+            <input type="text" id="empName" placeholder="Employee name" name="empName" required/>
+        </p>
+        <p>
+            <input type="text" id="job" placeholder="job" name="job" required/>
+        </p>
+        <p>
+            <input type="number" id="manager" placeholder="manager id" name="manager" required/>
+        </p>
+        <p>
+            <input type="text" id="hireDate" placeholder="yyyy-mm-dd" name="hireDate" required/>
+        </p>
+        <p>
+            <input type="number" id="salary" placeholder="salary" name="salary" required/>
+        </p>
+        <p>
+            <input type="number" id="commission" placeholder="commission" name="commission"/>
+        </p>
+        <p>
+            <input type="number" id="depID" placeholder="Department id" name="depID" required/>
+        </p>
+        <p>
+            <input type="submit" value=" create "/>
+        </p>
 
+    </form>
+</div>
 </body>
 </html>
 

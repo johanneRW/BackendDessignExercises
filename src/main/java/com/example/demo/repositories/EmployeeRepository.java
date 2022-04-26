@@ -1,6 +1,5 @@
 package com.example.demo.repositories;
 
-import com.example.demo.models.Department;
 import com.example.demo.models.Employee;
 import com.example.demo.utility.DatabaseConnectionManager;
 
@@ -18,16 +17,7 @@ public class EmployeeRepository implements IRepository<Employee> {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM employees");
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                Employee temp = new Employee(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getInt(4),
-                        rs.getString(5),
-                        rs.getInt(6),
-                        rs.getInt(7),
-                        rs.getInt(8)
-                );
+                Employee temp = newEmployeeFromResultSet(rs);
                 allEmployees.add(temp);
             }
 
@@ -48,17 +38,7 @@ public class EmployeeRepository implements IRepository<Employee> {
             pstmt.execute();
             ResultSet rs = pstmt.getResultSet();
             rs.next();
-            Employee employee = new Employee(
-                    rs.getInt(1),
-                    rs.getString(2),
-                    rs.getString(3),
-                    rs.getInt(4),
-                    rs.getString(5),
-                    rs.getInt(6),
-                    rs.getInt(7),
-                    rs.getInt(8)
-            );
-
+          Employee employee = newEmployeeFromResultSet(rs);
             return employee;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,7 +53,7 @@ public class EmployeeRepository implements IRepository<Employee> {
             PreparedStatement pstm = conn.prepareStatement("INSERT INTO employees(`employee_name`, `job`, `manager`, `hiredate`, `salary`, `commission`, `department_number`) VALUES (?,?,?,?,?,?,?)");
             pstm.setString(1, entity.getEmpName());
             pstm.setString(2, entity.getJob());
-            pstm.setInt(3, entity.getManger());
+            pstm.setInt(3, entity.getManager());
             pstm.setDate(4, Date.valueOf(entity.getHireDate()));
             pstm.setInt(5, entity.getSalary());
             pstm.setInt(6, entity.getCommission());
@@ -88,28 +68,19 @@ public class EmployeeRepository implements IRepository<Employee> {
         return false;
     }
 
-    @Override
-    public List<Employee> employeesByDepartment(String depName) {
+
+    public List<Employee> entitiesByName(String depName) {
         Connection conn = DatabaseConnectionManager.getConnection();
         List<Employee> empInDep = new ArrayList<>();
 
         try {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM employees, departments WHERE employees.department_number = departments.department_number AND departments.department_name =?");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT employees.* FROM employees, departments WHERE employees.department_number = departments.department_number AND departments.department_name =?");
             pstmt.setString(1, depName);
             pstmt.execute();
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                Employee temp = new Employee(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getInt(4),
-                        rs.getString(5),
-                        rs.getInt(6),
-                        rs.getInt(7),
-                        rs.getInt(8)
-                );
+                Employee temp = newEmployeeFromResultSet(rs);
                 empInDep.add(temp);
             }
 
@@ -118,5 +89,25 @@ public class EmployeeRepository implements IRepository<Employee> {
             e.printStackTrace();
         }
         return empInDep;
+    }
+
+    private Employee newEmployeeFromResultSet(ResultSet rs) {
+
+        try {
+            Employee temp = new Employee(
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getInt(4),
+                    rs.getString(5),
+                    rs.getInt(6),
+                    rs.getInt(7),
+                    rs.getInt(8)
+            );
+            return temp;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

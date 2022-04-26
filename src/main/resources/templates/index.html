@@ -5,6 +5,10 @@
     <title>Welcome</title>
 </head>
 <body>
+<div th:fragment="header"></div>
+<div class="container">
+    <header th:include="header :: header"></header>
     <h1>Welcome to Employees & Departments !!!!!</h1>
+</div>
 </body>
 </html>

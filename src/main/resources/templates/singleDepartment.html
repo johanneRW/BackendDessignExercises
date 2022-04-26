@@ -3,25 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Search Departments</title>
-    <link rel="stylesheet" th:href="@{style.css}"  type="text/css">
+    <link rel="stylesheet" th:href="@{style.css}" type="text/css">
 </head>
 <body>
+<div th:fragment="header"></div>
+<div class="container">
+    <header th:include="header :: header"></header>
 
-<h1>Search for a single department </h1>
+    <h1>Search for a single department </h1>
 
-<form th:action="@{/singleDepartment}" method="post">
-    <input type="number" id="id" placeholder="Department id" name="id" required/>
+    <form th:action="@{/singleDepartment}" method="post">
+        <input type="number" id="id" placeholder="Department id" name="id" required/>
 
-    <button type="submit" th:name="action" th:value="in">search</button>
+        <button type="submit" th:name="action" th:value="in">search</button>
 
-</form>
-<br>
-<tr th:if="${department != null}">
+    </form>
+    <br>
 
-    <td th:text="${department.getDeptno()}"></td>
-    <td th:text="${department.getDeptName()}"></td>
-    <td th:text="${department.getLocation()}"></td>
-</tr>
+    <div th:if="${department == null && search == true}">No departments matched your search, please try again.</div>
 
+    <table th:if="${department != null}">
+    <tr>
+        <td th:text="${department.getDeptno()}"></td>
+        <td th:text="${department.getDeptName()}"></td>
+        <td th:text="${department.getLocation()}"></td>
+    </tr>
+    </table>
+</div>
 </body>
 </html>

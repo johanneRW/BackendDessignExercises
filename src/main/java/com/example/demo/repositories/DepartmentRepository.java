@@ -19,11 +19,7 @@ public class DepartmentRepository implements IRepository<Department>{
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM departments");
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()){
-                Department temp = new Department(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3)
-                );
+                Department temp=newDepartmentFromResultSet(rs);
                 allDepartments.add(temp);
             }
 
@@ -44,12 +40,7 @@ public class DepartmentRepository implements IRepository<Department>{
             pstmt.execute();
             ResultSet rs = pstmt.getResultSet();
             rs.next();
-            Department department = new Department(
-                    rs.getInt(1),
-                    rs.getString(2),
-                    rs.getString(3)
-            );
-
+            Department department = newDepartmentFromResultSet(rs);
             return department;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,7 +54,24 @@ public class DepartmentRepository implements IRepository<Department>{
     }
 
     @Override
-    public List<Department> employeesByDepartment(String name) {
+    public List<Department> entitiesByName(String depName) {
         return null;
     }
+
+
+   private Department newDepartmentFromResultSet(ResultSet rs) {
+
+       Department department = null;
+       try {
+           department = new Department(
+                  rs.getInt(1),
+                  rs.getString(2),
+                  rs.getString(3)
+          );
+       } catch (SQLException e) {
+           e.printStackTrace();
+       }
+       return department;
+    }
+
 }

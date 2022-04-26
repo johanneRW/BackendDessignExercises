@@ -3,43 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Employees by departments</title>
-    <link rel="stylesheet" th:href="@{style.css}"  type="text/css">
+    <link rel="stylesheet" th:href="@{style.css}" type="text/css">
 </head>
 <body>
-<h1>Employees by department</h1>
-<p>Search for a department number</p>
-<form th:action="@{/employeesByDepartment}" method="post">
-    <input type="text" id="depName" placeholder="Department name" name="depName" required/>
+<div th:fragment="header"></div>
+<div class="container">
+    <header th:include="header :: header"></header>
+    <h1>Employees by department</h1>
 
-    <button type="submit" th:name="action" th:value="in">search</button>
+    <p>Search for a department name</p>
+    <form th:action="@{/employeesByDepartment}" method="post">
+        <input type="text" id="depName" placeholder="Department name" name="depName" required/>
 
-</form>
-<br>
-<table>
-    <thead>
-    <tr>
-        <th> ID</th>
-        <th style="width: 15%"> Name</th>
-        <th style="width: 15%"> Job</th>
-        <th> Manger</th>
-        <th style="width: 20%"> Hire date</th>
-        <th> Salary</th>
-        <th>Commission</th>
-        <th> Department Id</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr
-            th:each="employee : ${employees}">
-        <td th:text="${employee.getEmpId()}"></td>
-        <td th:text="${employee.getEmpName()}"></td>
-        <td th:text="${employee.getJob()}"></td>
-        <td th:text="${employee.getManger()}"></td>
-        <td th:text="${employee.getHireDate()}"></td>
-        <td th:text="${employee.getSalary()}"></td>
-        <td th:text="${employee.getCommission()}"></td>
-        <td th:text="${employee.getDepID()}"></td>
-    </tr>
-</table>
+        <button type="submit" th:name="action" th:value="in">search</button>
+
+    </form>
+    <br>
+    <table>
+        <thead>
+        <tr>
+            <th> ID</th>
+            <th style="width: 15%"> Name</th>
+            <th style="width: 15%"> Job</th>
+            <th> Manager</th>
+            <th style="width: 20%"> Hire date</th>
+            <th> Salary</th>
+            <th>Commission</th>
+            <th> Department Id</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+                th:each="employee : ${employees}">
+            <td th:text="${employee.getEmpId()}"></td>
+            <td th:text="${employee.getEmpName()}"></td>
+            <td th:text="${employee.getJob()}"></td>
+            <td th:text="${employee.getManager()}"></td>
+            <td th:text="${employee.getHireDate()}"></td>
+            <td th:text="${employee.getSalary()}"></td>
+            <td th:text="${employee.getCommission()}"></td>
+            <td th:text="${employee.getDepID()}"></td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

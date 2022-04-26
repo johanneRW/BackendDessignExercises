@@ -2,13 +2,13 @@ package com.example.demo.models;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.Optional;
 
 public class Employee {
     private int empId;
     private String empName;
     private String job;
-    private int manger;
+    private int manager;
     private LocalDate hireDate;
     private int salary;
     private int commission;
@@ -16,11 +16,11 @@ public class Employee {
     private DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy-MM-dd");;
 
 
-    public Employee(int empId, String empName, String job, int manger, String hireDateAsString, int salary, int commission, int depID) {
+    public Employee(int empId, String empName, String job, int manager, String hireDateAsString, int salary, int commission, int depID) {
         this.empId = empId;
         this.empName = empName;
         this.job = job;
-        this.manger = manger;
+        this.manager = manager;
         this.hireDate = getHireDateFromString(hireDateAsString);
         this.salary = salary;
         this.commission = commission;
@@ -28,14 +28,15 @@ public class Employee {
     }
 
 
-
-    public Employee(String empName, String job, int manger, String hireDateAsString, int salary, int commission, int depID) {
+    public Employee(String empName, String job, int manager, String hireDateAsString, int salary, Optional<Integer> commission, int depID) {
         this.empName = empName;
         this.job = job;
-        this.manger = manger;
+        this.manager = manager;
         this.hireDate = getHireDateFromString(hireDateAsString);
         this.salary = salary;
-        this.commission = commission;
+        if (commission.isEmpty()) {
+            this.commission = 0;
+        }
         this.depID = depID;
     }
 
@@ -69,12 +70,12 @@ public class Employee {
         this.job = job;
     }
 
-    public int getManger() {
-        return manger;
+    public int getManager() {
+        return manager;
     }
 
-    public void setManger(int manger) {
-        this.manger = manger;
+    public void setManager(int manager) {
+        this.manager = manager;
     }
 
     public LocalDate getHireDate() {
@@ -116,7 +117,7 @@ public class Employee {
                 "empId=" + empId +
                 ", empName='" + empName + '\'' +
                 ", job='" + job + '\'' +
-                ", manger=" + manger +
+                ", manager=" + manager +
                 ", hireDate=" + hireDate +
                 ", salary=" + salary +
                 ", commission=" + commission +

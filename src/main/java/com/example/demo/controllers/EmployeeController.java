@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class EmployeeController {
@@ -31,23 +33,31 @@ public class EmployeeController {
     public String SingleDepartment(@RequestParam("id") int id, Model model) {
         Employee employee = employeeIRepository.getSingleById(id);
         model.addAttribute("employee", employee);
-        return new String("redirect:/singleEmployee");
+        if (employee == null) {
+            model.addAttribute("search", true);
+        }
+        return "/singleEmployee";
     }
 
     @GetMapping("/createEmployee")
-    public String CreateEmployee() {
+    public String CreateEmployee(Model model, @RequestParam("success") String success) {
+        model.addAttribute("success", success);
         return "createEmployee";
     }
 
     @PostMapping("/createEmployee")
-    public String CreateEmployee(@RequestParam("empName") String empName, @RequestParam("job") String job, @RequestParam("manger") int manger, @RequestParam("hireDate") String hireDate,
-                                 @RequestParam("salary") int salary, @RequestParam("commission") int commission, @RequestParam("depID") int depID) {
+    public String CreateEmployee(Model model, @RequestParam("empName") String empName, @RequestParam("job") String job, @RequestParam("manager") int manager, @RequestParam("hireDate") String hireDate,
+                                 @RequestParam("salary") int salary, @RequestParam("commission") Optional<Integer> commission, @RequestParam("depID") int depID) {
         String jobUp=job.toUpperCase();
         String empNameUp=empName.toUpperCase();
-        Employee employee = new Employee(empNameUp, jobUp, manger, hireDate, salary, commission, depID);
+        Employee employee = new Employee(empNameUp, jobUp, manager, hireDate, salary, commission, depID);
         Boolean created = employeeIRepository.create(employee);
-
-        return new String("redirect:/createEmployee");
+        if (created) {
+            return new String("redirect:/createEmployee?success=true");
+        } else {
+            model.addAttribute("success", "nope");
+            return "createEmployee";
+        }
     }
 
     @GetMapping("/employeesByDepartment")
@@ -57,7 +67,7 @@ public class EmployeeController {
 
     @PostMapping("/employeesByDepartment")
     public String employeesByDepartment(@RequestParam("depName") String depName, Model model){
-        List<Employee> empByDep= employeeIRepository.employeesByDepartment(depName);
+        List<Employee> empByDep= employeeIRepository.entitiesByName(depName);
         model.addAttribute("employees", empByDep);
         return "employeesByDepartment";
     }

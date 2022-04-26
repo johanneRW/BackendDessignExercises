@@ -16,25 +16,26 @@ public class DepartmentController {
     private final IRepository<Department> departmentRepository = new DepartmentRepository();
 
     @GetMapping("/departments")
-    public String allDepartments(Model model){
-       List<Department> departments= departmentRepository.getAllEntities();
+    public String allDepartments(Model model) {
+        List<Department> departments = departmentRepository.getAllEntities();
         model.addAttribute("departments", departments);
         return "departments";
     }
 
     @GetMapping("/singleDepartment")
-    public String singleDepartment(){
+    public String singleDepartment() {
         return "singleDepartment";
     }
 
     @PostMapping("/singleDepartment")
-    public String singleDepartment(@RequestParam("id") int id, Model model){
-        Department department= departmentRepository.getSingleById(id);
+    public String singleDepartment(@RequestParam("id") int id, Model model) {
+        Department department = departmentRepository.getSingleById(id);
         model.addAttribute("department", department);
-        return new String ("redirect:/singleDepartment");
+        if (department == null) {
+            model.addAttribute("search", true);
+        }
+        return "singleDepartment";
     }
-
-
 
 
 }
